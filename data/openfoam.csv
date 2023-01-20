@@ -1,0 +1,349 @@
+﻿"resource","config","cores","id","metric","value"
+"Ookami-Fujitsu","v1812 Fujitsu Patches",48,2,"mashing",518.944753738
+"Ookami-Fujitsu","v1812 Fujitsu Patches",48,8,"mashing",500.764789551
+"Ookami-Fujitsu","v1812 Fujitsu Patches",48,3,"mashing",501.234975284
+"Ookami-Fujitsu","v1812 Fujitsu Patches",48,1,"mashing",507.645999814
+"Ookami-Fujitsu","v1812 Fujitsu Patches",48,5,"mashing",508.815787292
+"Ookami-Fujitsu","v1812 Fujitsu Patches",48,7,"mashing",512.436181345
+"Ookami-Fujitsu","v1812 Fujitsu Patches",48,6,"mashing",498.834964437
+"Ookami-Fujitsu","v1812 Fujitsu Patches",48,9,"mashing",500.945852109
+"Ookami-Fujitsu","v1812 Fujitsu Patches",48,10,"mashing",532.952072853
+"Ookami-Fujitsu","v1812 Fujitsu Patches",48,4,"mashing",500.080999721
+"Ookami-OSS","v2206",48,2,"mashing",977.752208548
+"Ookami-OSS","v2206",48,8,"mashing",860.522472581
+"Ookami-OSS","v2206",48,3,"mashing",932.991699769
+"Ookami-OSS","v2206",48,5,"mashing",827.731316935
+"Ookami-OSS","v2206",48,7,"mashing",920.475934231
+"Ookami-OSS","v2206",48,6,"mashing",935.760747836
+"Ookami-OSS","v2206",48,9,"mashing",1026.767056198
+"Ookami-OSS","v2206",48,10,"mashing",841.916238474
+"Ookami-OSS","v2206",48,4,"mashing",850.326955225
+"Amazon-Graviton3-48","v2206",48,8,"mashing",130.495792296
+"Amazon-Graviton3-48","v2206",48,1,"mashing",139.79816786
+"Amazon-Graviton3-48","v2206",48,5,"mashing",141.19830016
+"Amazon-Graviton3-48","v2206",48,7,"mashing",122.814873662
+"Amazon-Graviton3-48","v2206",48,6,"mashing",133.307265466
+"Amazon-Graviton3-48","v2206",48,9,"mashing",127.156042914
+"Amazon-Graviton3-48","v2206",48,10,"mashing",148.056529882
+"Amazon-Graviton3-48","v2206",48,4,"mashing",126.209091044
+"Amazon-Graviton2-48","v2206",48,2,"mashing",233.297775583
+"Amazon-Graviton2-48","v2206",48,8,"mashing",199.409167088
+"Amazon-Graviton2-48","v2206",48,3,"mashing",189.636232668
+"Amazon-Graviton2-48","v2206",48,1,"mashing",221.623906621
+"Amazon-Graviton2-48","v2206",48,5,"mashing",220.157095641
+"Amazon-Graviton2-48","v2206",48,7,"mashing",207.494022388
+"Amazon-Graviton2-48","v2206",48,6,"mashing",201.811795193
+"Amazon-Graviton2-48","v2206",48,9,"mashing",224.130385224
+"Amazon-Graviton2-48","v2206",48,10,"mashing",206.481100194
+"Amazon-Graviton2-48","v2206",48,4,"mashing",221.201029468
+"Google-Ampere-Altra","v2206",48,2,"mashing",183.279654637
+"Google-Ampere-Altra","v2206",48,8,"mashing",194.427361938
+"Google-Ampere-Altra","v2206",48,3,"mashing",202.05417998
+"Google-Ampere-Altra","v2206",48,1,"mashing",204.440036251
+"Google-Ampere-Altra","v2206",48,5,"mashing",189.472334867
+"Google-Ampere-Altra","v2206",48,7,"mashing",200.765307383
+"Google-Ampere-Altra","v2206",48,6,"mashing",210.326808127
+"Google-Ampere-Altra","v2206",48,9,"mashing",168.606892186
+"Google-Ampere-Altra","v2206",48,10,"mashing",177.119220032
+"Google-Ampere-Altra","v2206",48,4,"mashing",203.404919984
+"Stampede2-SKX","v2206",48,2,"mashing",208.358407252
+"Stampede2-SKX","v2206",48,8,"mashing",222.529499747
+"Stampede2-SKX","v2206",48,3,"mashing",247.615515142
+"Stampede2-SKX","v2206",48,1,"mashing",201.56152587
+"Stampede2-SKX","v2206",48,5,"mashing",221.226773399
+"Stampede2-SKX","v2206",48,7,"mashing",198.936687292
+"Stampede2-SKX","v2206",48,6,"mashing",214.450176395
+"Stampede2-SKX","v2206",48,9,"mashing",246.487683159
+"Stampede2-SKX","v2206",48,10,"mashing",258.405236131
+"Stampede2-SKX","v2206",48,4,"mashing",224.099105838
+"Stampede2-ICX","v2206, 48",48,2,"mashing",157.239833414
+"Stampede2-ICX","v2206, 48",48,8,"mashing",161.599400828
+"Stampede2-ICX","v2206, 48",48,3,"mashing",147.783758302
+"Stampede2-ICX","v2206, 48",48,1,"mashing",153.098629369
+"Stampede2-ICX","v2206, 48",48,5,"mashing",132.016428561
+"Stampede2-ICX","v2206, 48",48,7,"mashing",168.309098025
+"Stampede2-ICX","v2206, 48",48,6,"mashing",152.906457938
+"Stampede2-ICX","v2206, 48",48,9,"mashing",153.469722872
+"Stampede2-ICX","v2206, 48",48,10,"mashing",140.759308891
+"Stampede2-ICX","v2206, 48",48,4,"mashing",174.031665146
+"Stampede2-ICX","v2206, 80",80,2,"mashing",151.197567157
+"Stampede2-ICX","v2206, 80",80,8,"mashing",169.93666253
+"Stampede2-ICX","v2206, 80",80,3,"mashing",166.340579461
+"Stampede2-ICX","v2206, 80",80,1,"mashing",163.385362618
+"Stampede2-ICX","v2206, 80",80,5,"mashing",160.522116563
+"Stampede2-ICX","v2206, 80",80,7,"mashing",151.269504468
+"Stampede2-ICX","v2206, 80",80,6,"mashing",169.961181333
+"Stampede2-ICX","v2206, 80",80,9,"mashing",187.339107561
+"Stampede2-ICX","v2206, 80",80,10,"mashing",149.786619037
+"Stampede2-ICX","v2206, 80",80,4,"mashing",148.212162494
+"Anvil","v2206, 48",48,2,"mashing",162.241403029
+"Anvil","v2206, 48",48,8,"mashing",155.264709563
+"Anvil","v2206, 48",48,3,"mashing",169.92083388
+"Anvil","v2206, 48",48,1,"mashing",151.098734612
+"Anvil","v2206, 48",48,5,"mashing",181.777676814
+"Anvil","v2206, 48",48,7,"mashing",167.919626476
+"Anvil","v2206, 48",48,6,"mashing",166.979009101
+"Anvil","v2206, 48",48,9,"mashing",160.627845913
+"Anvil","v2206, 48",48,10,"mashing",168.838120791
+"Anvil","v2206, 48",48,4,"mashing",158.295945635
+"Anvil","v2206, 128",128,2,"mashing",192.723936302
+"Anvil","v2206, 128",128,8,"mashing",207.128480993
+"Anvil","v2206, 128",128,3,"mashing",226.813048125
+"Anvil","v2206, 128",128,1,"mashing",214.403138801
+"Anvil","v2206, 128",128,5,"mashing",188.306408723
+"Anvil","v2206, 128",128,7,"mashing",246.787320375
+"Anvil","v2206, 128",128,6,"mashing",212.874590833
+"Anvil","v2206, 128",128,9,"mashing",197.674514213
+"Anvil","v2206, 128",128,4,"mashing",214.296498543
+"Expanse","v2206, 48",48,2,"mashing",270.085518992
+"Expanse","v2206, 48",48,8,"mashing",240.932311227
+"Expanse","v2206, 48",48,3,"mashing",239.354539146
+"Expanse","v2206, 48",48,1,"mashing",277.342766524
+"Expanse","v2206, 48",48,5,"mashing",245.052322558
+"Expanse","v2206, 48",48,7,"mashing",272.32523218
+"Expanse","v2206, 48",48,6,"mashing",262.472938571
+"Expanse","v2206, 48",48,9,"mashing",321.847123094
+"Expanse","v2206, 48",48,10,"mashing",283.796797525
+"Expanse","v2206, 48",48,4,"mashing",212.43033198
+"Expanse","v2206, 128",128,2,"mashing",429.297480937
+"Expanse","v2206, 128",128,8,"mashing",449.549827168
+"Expanse","v2206, 128",128,3,"mashing",370.416032426
+"Expanse","v2206, 128",128,1,"mashing",413.299399856
+"Expanse","v2206, 128",128,5,"mashing",433.092424785
+"Expanse","v2206, 128",128,7,"mashing",444.866797674
+"Expanse","v2206, 128",128,6,"mashing",389.382118833
+"Expanse","v2206, 128",128,9,"mashing",398.291786389
+"Expanse","v2206, 128",128,10,"mashing",370.262676638
+"Expanse","v2206, 128",128,4,"mashing",405.620047975
+"Ookami-Fujitsu","v1812 Fujitsu Patches",48,2,"solver",657.235724734
+"Ookami-Fujitsu","v1812 Fujitsu Patches",48,8,"solver",638.101178764
+"Ookami-Fujitsu","v1812 Fujitsu Patches",48,3,"solver",639.875388073
+"Ookami-Fujitsu","v1812 Fujitsu Patches",48,1,"solver",650.377250201
+"Ookami-Fujitsu","v1812 Fujitsu Patches",48,5,"solver",651.793122157
+"Ookami-Fujitsu","v1812 Fujitsu Patches",48,7,"solver",645.770776832
+"Ookami-Fujitsu","v1812 Fujitsu Patches",48,6,"solver",657.264024991
+"Ookami-Fujitsu","v1812 Fujitsu Patches",48,9,"solver",638.812044631
+"Ookami-Fujitsu","v1812 Fujitsu Patches",48,10,"solver",688.748619462
+"Ookami-Fujitsu","v1812 Fujitsu Patches",48,4,"solver",658.362220562
+"Ookami-OSS","v2206",48,2,"solver",759.209049677
+"Ookami-OSS","v2206",48,8,"solver",773.243952941
+"Ookami-OSS","v2206",48,3,"solver",773.001593823
+"Ookami-OSS","v2206",48,5,"solver",759.98573979
+"Ookami-OSS","v2206",48,7,"solver",737.677929451
+"Ookami-OSS","v2206",48,6,"solver",747.355185759
+"Ookami-OSS","v2206",48,9,"solver",752.805600555
+"Ookami-OSS","v2206",48,10,"solver",747.416631396
+"Ookami-OSS","v2206",48,4,"solver",745.028799102
+"Amazon-Graviton3-48","v2206",48,8,"solver",281.756169113
+"Amazon-Graviton3-48","v2206",48,1,"solver",NA
+"Amazon-Graviton3-48","v2206",48,5,"solver",NA
+"Amazon-Graviton3-48","v2206",48,7,"solver",278.924286767
+"Amazon-Graviton3-48","v2206",48,6,"solver",280.10941983
+"Amazon-Graviton3-48","v2206",48,9,"solver",280.07713613
+"Amazon-Graviton3-48","v2206",48,10,"solver",282.177830391
+"Amazon-Graviton3-48","v2206",48,4,"solver",NA
+"Amazon-Graviton2-48","v2206",48,2,"solver",483.073790263
+"Amazon-Graviton2-48","v2206",48,8,"solver",482.053888624
+"Amazon-Graviton2-48","v2206",48,3,"solver",480.094591316
+"Amazon-Graviton2-48","v2206",48,1,"solver",478.641022846
+"Amazon-Graviton2-48","v2206",48,5,"solver",480.663992507
+"Amazon-Graviton2-48","v2206",48,7,"solver",475.510912725
+"Amazon-Graviton2-48","v2206",48,6,"solver",482.93261096
+"Amazon-Graviton2-48","v2206",48,9,"solver",482.933284583
+"Amazon-Graviton2-48","v2206",48,10,"solver",476.680607439
+"Amazon-Graviton2-48","v2206",48,4,"solver",486.534908983
+"Google-Ampere-Altra","v2206",48,2,"solver",461.164076372
+"Google-Ampere-Altra","v2206",48,8,"solver",454.044765942
+"Google-Ampere-Altra","v2206",48,3,"solver",457.077980126
+"Google-Ampere-Altra","v2206",48,1,"solver",458.940271837
+"Google-Ampere-Altra","v2206",48,5,"solver",455.941045322
+"Google-Ampere-Altra","v2206",48,7,"solver",456.64420777
+"Google-Ampere-Altra","v2206",48,6,"solver",457.034599109
+"Google-Ampere-Altra","v2206",48,9,"solver",473.774218995
+"Google-Ampere-Altra","v2206",48,10,"solver",452.15142123
+"Google-Ampere-Altra","v2206",48,4,"solver",454.005997181
+"Stampede2-SKX","v2206",48,2,"solver",382.58899935
+"Stampede2-SKX","v2206",48,8,"solver",381.566686882
+"Stampede2-SKX","v2206",48,3,"solver",382.487862158
+"Stampede2-SKX","v2206",48,1,"solver",383.274093445
+"Stampede2-SKX","v2206",48,5,"solver",397.205104871
+"Stampede2-SKX","v2206",48,7,"solver",380.37650323
+"Stampede2-SKX","v2206",48,6,"solver",380.331704732
+"Stampede2-SKX","v2206",48,9,"solver",395.5975937
+"Stampede2-SKX","v2206",48,10,"solver",381.532261662
+"Stampede2-SKX","v2206",48,4,"solver",379.860314606
+"Stampede2-ICX","v2206, 48",48,2,"solver",239.107371916
+"Stampede2-ICX","v2206, 48",48,8,"solver",238.813991324
+"Stampede2-ICX","v2206, 48",48,3,"solver",239.363051269
+"Stampede2-ICX","v2206, 48",48,1,"solver",239.125372863
+"Stampede2-ICX","v2206, 48",48,5,"solver",238.864985631
+"Stampede2-ICX","v2206, 48",48,7,"solver",239.274986882
+"Stampede2-ICX","v2206, 48",48,6,"solver",241.075968191
+"Stampede2-ICX","v2206, 48",48,9,"solver",237.982523272
+"Stampede2-ICX","v2206, 48",48,10,"solver",238.796200055
+"Stampede2-ICX","v2206, 48",48,4,"solver",239.896911856
+"Stampede2-ICX","v2206, 80",80,2,"solver",207.100043892
+"Stampede2-ICX","v2206, 80",80,8,"solver",205.137925566
+"Stampede2-ICX","v2206, 80",80,3,"solver",205.113312589
+"Stampede2-ICX","v2206, 80",80,1,"solver",208.575766131
+"Stampede2-ICX","v2206, 80",80,5,"solver",205.627803343
+"Stampede2-ICX","v2206, 80",80,7,"solver",206.324805628
+"Stampede2-ICX","v2206, 80",80,6,"solver",207.066369346
+"Stampede2-ICX","v2206, 80",80,9,"solver",204.598484011
+"Stampede2-ICX","v2206, 80",80,10,"solver",204.893532749
+"Stampede2-ICX","v2206, 80",80,4,"solver",208.441099408
+"Anvil","v2206, 48",48,2,"solver",203.000759459
+"Anvil","v2206, 48",48,8,"solver",205.217622373
+"Anvil","v2206, 48",48,3,"solver",205.425925421
+"Anvil","v2206, 48",48,1,"solver",203.659952179
+"Anvil","v2206, 48",48,5,"solver",203.147759358
+"Anvil","v2206, 48",48,7,"solver",204.143995298
+"Anvil","v2206, 48",48,6,"solver",203.869378398
+"Anvil","v2206, 48",48,9,"solver",203.778920374
+"Anvil","v2206, 48",48,10,"solver",203.500155392
+"Anvil","v2206, 48",48,4,"solver",203.402839796
+"Anvil","v2206, 128",128,2,"solver",153.173378377
+"Anvil","v2206, 128",128,8,"solver",145.452539037
+"Anvil","v2206, 128",128,3,"solver",144.808429249
+"Anvil","v2206, 128",128,1,"solver",144.268930289
+"Anvil","v2206, 128",128,5,"solver",146.847129073
+"Anvil","v2206, 128",128,7,"solver",144.448708878
+"Anvil","v2206, 128",128,6,"solver",146.298572633
+"Anvil","v2206, 128",128,9,"solver",148.936372377
+"Anvil","v2206, 128",128,4,"solver",145.772054106
+"Expanse","v2206, 48",48,2,"solver",178.685811141
+"Expanse","v2206, 48",48,8,"solver",184.797062119
+"Expanse","v2206, 48",48,3,"solver",183.873961146
+"Expanse","v2206, 48",48,1,"solver",179.203845448
+"Expanse","v2206, 48",48,5,"solver",180.753619212
+"Expanse","v2206, 48",48,7,"solver",180.504611597
+"Expanse","v2206, 48",48,6,"solver",177.093343886
+"Expanse","v2206, 48",48,9,"solver",176.441275522
+"Expanse","v2206, 48",48,10,"solver",179.901937497
+"Expanse","v2206, 48",48,4,"solver",178.182916107
+"Expanse","v2206, 128",128,2,"solver",159.164317644
+"Expanse","v2206, 128",128,8,"solver",156.398599625
+"Expanse","v2206, 128",128,3,"solver",160.186115091
+"Expanse","v2206, 128",128,1,"solver",156.619493407
+"Expanse","v2206, 128",128,5,"solver",159.1268142
+"Expanse","v2206, 128",128,7,"solver",441.526118873
+"Expanse","v2206, 128",128,6,"solver",158.213380686
+"Expanse","v2206, 128",128,9,"solver",159.544630063
+"Expanse","v2206, 128",128,10,"solver",275.208472318
+"Expanse","v2206, 128",128,4,"solver",158.99626481
+"Ookami-Fujitsu","v1812 Fujitsu Patches",48,2,"runtime",1360.53588073
+"Ookami-Fujitsu","v1812 Fujitsu Patches",48,8,"runtime",1322.889027935
+"Ookami-Fujitsu","v1812 Fujitsu Patches",48,3,"runtime",1325.230736222
+"Ookami-Fujitsu","v1812 Fujitsu Patches",48,1,"runtime",1342.424511128
+"Ookami-Fujitsu","v1812 Fujitsu Patches",48,5,"runtime",1345.414224742
+"Ookami-Fujitsu","v1812 Fujitsu Patches",48,7,"runtime",1342.739785586
+"Ookami-Fujitsu","v1812 Fujitsu Patches",48,6,"runtime",1340.135044918
+"Ookami-Fujitsu","v1812 Fujitsu Patches",48,9,"runtime",1324.384075274
+"Ookami-Fujitsu","v1812 Fujitsu Patches",48,10,"runtime",1406.66069944
+"Ookami-Fujitsu","v1812 Fujitsu Patches",48,4,"runtime",1342.525074111
+"Ookami-OSS","v2206",48,2,"runtime",1821.364931212
+"Ookami-OSS","v2206",48,8,"runtime",1717.664686316
+"Ookami-OSS","v2206",48,3,"runtime",1788.97770418
+"Ookami-OSS","v2206",48,5,"runtime",1671.517383633
+"Ookami-OSS","v2206",48,7,"runtime",1741.70386784
+"Ookami-OSS","v2206",48,6,"runtime",1767.338828061
+"Ookami-OSS","v2206",48,9,"runtime",1862.73229719
+"Ookami-OSS","v2206",48,10,"runtime",1674.224435303
+"Ookami-OSS","v2206",48,4,"runtime",1680.448452483
+"Amazon-Graviton3-48","v2206",48,8,"runtime",427.386252483
+"Amazon-Graviton3-48","v2206",48,1,"runtime",437.944602169
+"Amazon-Graviton3-48","v2206",48,5,"runtime",436.646462682
+"Amazon-Graviton3-48","v2206",48,7,"runtime",416.980185552
+"Amazon-Graviton3-48","v2206",48,6,"runtime",428.67535335
+"Amazon-Graviton3-48","v2206",48,9,"runtime",422.5147921
+"Amazon-Graviton3-48","v2206",48,10,"runtime",446.070372078
+"Amazon-Graviton3-48","v2206",48,4,"runtime",422.407048496
+"Amazon-Graviton2-48","v2206",48,2,"runtime",741.656554629
+"Amazon-Graviton2-48","v2206",48,8,"runtime",704.894533157
+"Amazon-Graviton2-48","v2206",48,3,"runtime",692.558822398
+"Amazon-Graviton2-48","v2206",48,1,"runtime",722.860720049
+"Amazon-Graviton2-48","v2206",48,5,"runtime",723.132233658
+"Amazon-Graviton2-48","v2206",48,7,"runtime",705.909321219
+"Amazon-Graviton2-48","v2206",48,6,"runtime",708.454122934
+"Amazon-Graviton2-48","v2206",48,9,"runtime",729.726308589
+"Amazon-Graviton2-48","v2206",48,10,"runtime",705.639241926
+"Amazon-Graviton2-48","v2206",48,4,"runtime",732.15865005
+"Google-Ampere-Altra","v2206",48,2,"runtime",657.21905486
+"Google-Ampere-Altra","v2206",48,8,"runtime",661.038471447
+"Google-Ampere-Altra","v2206",48,3,"runtime",671.908996062
+"Google-Ampere-Altra","v2206",48,1,"runtime",678.633937196
+"Google-Ampere-Altra","v2206",48,5,"runtime",658.386210042
+"Google-Ampere-Altra","v2206",48,7,"runtime",670.244007919
+"Google-Ampere-Altra","v2206",48,6,"runtime",680.472424276
+"Google-Ampere-Altra","v2206",48,9,"runtime",655.302991475
+"Google-Ampere-Altra","v2206",48,10,"runtime",642.15633508
+"Google-Ampere-Altra","v2206",48,4,"runtime",670.208209739
+"Stampede2-SKX","v2206",48,2,"runtime",622.96620195
+"Stampede2-SKX","v2206",48,8,"runtime",635.018269064
+"Stampede2-SKX","v2206",48,3,"runtime",660.970641027
+"Stampede2-SKX","v2206",48,1,"runtime",616.236239223
+"Stampede2-SKX","v2206",48,5,"runtime",650.527499383
+"Stampede2-SKX","v2206",48,7,"runtime",611.169630573
+"Stampede2-SKX","v2206",48,6,"runtime",625.828588433
+"Stampede2-SKX","v2206",48,9,"runtime",673.054108961
+"Stampede2-SKX","v2206",48,10,"runtime",671.388527217
+"Stampede2-SKX","v2206",48,4,"runtime",634.932998047
+"Stampede2-ICX","v2206, 48",48,2,"runtime",421.559375035
+"Stampede2-ICX","v2206, 48",48,8,"runtime",425.231139169
+"Stampede2-ICX","v2206, 48",48,3,"runtime",412.256635101
+"Stampede2-ICX","v2206, 48",48,1,"runtime",417.168053949
+"Stampede2-ICX","v2206, 48",48,5,"runtime",396.010119344
+"Stampede2-ICX","v2206, 48",48,7,"runtime",432.427216362
+"Stampede2-ICX","v2206, 48",48,6,"runtime",418.905016903
+"Stampede2-ICX","v2206, 48",48,9,"runtime",416.942626402
+"Stampede2-ICX","v2206, 48",48,10,"runtime",404.979364462
+"Stampede2-ICX","v2206, 48",48,4,"runtime",442.074105121
+"Stampede2-ICX","v2206, 80",80,2,"runtime",389.215437284
+"Stampede2-ICX","v2206, 80",80,8,"runtime",405.670701468
+"Stampede2-ICX","v2206, 80",80,3,"runtime",402.649677814
+"Stampede2-ICX","v2206, 80",80,1,"runtime",403.470586458
+"Stampede2-ICX","v2206, 80",80,5,"runtime",397.503872518
+"Stampede2-ICX","v2206, 80",80,7,"runtime",388.26954238
+"Stampede2-ICX","v2206, 80",80,6,"runtime",408.136490451
+"Stampede2-ICX","v2206, 80",80,9,"runtime",422.167009868
+"Stampede2-ICX","v2206, 80",80,10,"runtime",385.293301884
+"Stampede2-ICX","v2206, 80",80,4,"runtime",388.019603364
+"Anvil","v2206, 48",48,2,"runtime",387.178991174
+"Anvil","v2206, 48",48,8,"runtime",386.995123135
+"Anvil","v2206, 48",48,3,"runtime",401.786027199
+"Anvil","v2206, 48",48,1,"runtime",377.64649658
+"Anvil","v2206, 48",48,5,"runtime",410.956478775
+"Anvil","v2206, 48",48,7,"runtime",396.319473494
+"Anvil","v2206, 48",48,6,"runtime",394.806539677
+"Anvil","v2206, 48",48,9,"runtime",390.500514065
+"Anvil","v2206, 48",48,10,"runtime",398.286346325
+"Anvil","v2206, 48",48,4,"runtime",385.142837921
+"Anvil","v2206, 128",128,2,"runtime",390.118872173
+"Anvil","v2206, 128",128,8,"runtime",387.749341824
+"Anvil","v2206, 128",128,3,"runtime",413.086914093
+"Anvil","v2206, 128",128,1,"runtime",396.823264483
+"Anvil","v2206, 128",128,5,"runtime",383.456663574
+"Anvil","v2206, 128",128,7,"runtime",426.706901604
+"Anvil","v2206, 128",128,6,"runtime",405.407767339
+"Anvil","v2206, 128",128,9,"runtime",381.246040585
+"Anvil","v2206, 128",128,4,"runtime",407.519767328
+"Expanse","v2206, 48",48,2,"runtime",487.103412995
+"Expanse","v2206, 48",48,8,"runtime",466.853564388
+"Expanse","v2206, 48",48,3,"runtime",465.054767684
+"Expanse","v2206, 48",48,1,"runtime",494.23052959
+"Expanse","v2206, 48",48,5,"runtime",467.419215299
+"Expanse","v2206, 48",48,7,"runtime",490.735147104
+"Expanse","v2206, 48",48,6,"runtime",477.975849711
+"Expanse","v2206, 48",48,9,"runtime",540.817662523
+"Expanse","v2206, 48",48,10,"runtime",501.89651809
+"Expanse","v2206, 48",48,4,"runtime",440.593092468
+"Expanse","v2206, 128",128,2,"runtime",634.219614842
+"Expanse","v2206, 128",128,8,"runtime",650.142620894
+"Expanse","v2206, 128",128,3,"runtime",587.406898375
+"Expanse","v2206, 128",128,1,"runtime",616.718938909
+"Expanse","v2206, 128",128,5,"runtime",639.293622714
+"Expanse","v2206, 128",128,7,"runtime",932.346274091
+"Expanse","v2206, 128",128,6,"runtime",603.055130401
+"Expanse","v2206, 128",128,9,"runtime",612.345302133
+"Expanse","v2206, 128",128,10,"runtime",702.790365908
+"Expanse","v2206, 128",128,4,"runtime",613.21706899

@@ -1,0 +1,509 @@
+---
+title: "Comparison of Modern ARM-Based System and their x86 counterpart "
+output: html_document
+---
+
+<style type="text/css">
+.main-container {
+  max-width: 3840px;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+
+```{r setup, include=FALSE,results='hide',message=FALSE,warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(knitr)
+library(stringr)
+library(lubridate)
+
+source("common_data.R")
+```
+
+```{r}
+# load data
+load("data/appkernel.Rda")
+load("data/openfoam.Rda")
+app_version <- results_str %>% 
+  filter(metric=="App:Version") %>% 
+  select(resource,task_id,app_version=value)
+
+
+```
+
+```{r}
+# write csv data
+readr::write_excel_csv(results_num,file="data/appkernel_results_num.csv")
+readr::write_excel_csv(results_str,file="data/appkernel_results_str.csv")
+readr::write_excel_csv(openfoam,file="data/openfoam.csv")
+readr::write_excel_csv(resource_spec,file="data/resource_spec.csv")
+```
+
+# Theoretical FLOPS
+
+Some notes on theoretical GFLOPS calculations
+
+```
+# ookami: single core peak 1.8 GHz(57.6 GFLOP/s)
+
+# stampede avx512 sustained avx512 freq 1.4 GHz turbo 2.0
+# https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/xeon-scalable-spec-update.pdf
+# freq*8(width)*2*(fma)*2(units)
+
+# stampede2 SKX 	Intel Xeon Platinum 8160 1.4(freq)*8(width)*2*(fma)*2(units)=44.8 (64 at turbo 2.0GHz)
+
+# stampede2 Intel Xeon Phi 7250 ("Knights Landing") 1.4(freq)*8(width)*2*(fma)*2(units)=44.8
+
+# AMD EPYC 7742 (Bridges2/Expanse) 2.25  GHz - base 3.4 max boost
+# AVX2 FMA
+# 2.25(freq)*4(width)*2*(fma)*2(units)=36
+
+dgemm$tflops <- NA
+dgemm$tflops[grepl("Ookami",dgemm$config)] <- 57.6
+dgemm$tflops[grepl("Stampede2-SKX",dgemm$config)] <- 44.8
+dgemm$tflops[grepl("Stampede2-KNL",dgemm$config)] <- 44.8
+dgemm$tflops[grepl("Bridges-2",dgemm$config)] <- 36
+dgemm$tflops[grepl("Expanse",dgemm$config)] <- 36
+```
+
+# Quick Inspection
+
+```{r rows.print=40}
+# check Simulation Speed for gromacs on Ookami-OSS
+results_num %>% 
+  filter(metric=="Simulation Speed" & app =="gromacs" & resource=="Ookami-OSS") %>% 
+  left_join(app_version, by=c("resource", "task_id")) %>% head() %>% kable()
+```
+
+```{r rows.print=40}
+# check energy for gromacs on Ookami-OSS
+results_num %>% 
+  filter(metric=="Energy" & app =="gromacs" & resource=="Ookami-OSS") %>% 
+  left_join(app_version, by=c("resource", "task_id")) %>% head() %>% kable()
+```
+
+```{r rows.print=100,eval=FALSE}
+# print stats on jobs' execution times for all tested resources and apps
+results_num %>% filter(metric==m_walltime) %>%
+  group_by(app,resource) %>%
+  summarise(mean=mean(value),sd=sd(value),n=n(),.groups = "drop") %>% kable()
+```
+
+# Configurations
+
+Software stack naming On Ookami
+
+* OSS - gcc + openmpi + openblas + fftw3
+* Cray - cray compiler, mpi, libsci, fft
+* ARM - arm compiler + openmpi +
+* Fujitsu - futjitsu compiler
+
+Other system:
+* GCC - usage of gcc compilers
+* ICC - intel compiler with MKL libraries (sometimes FFT was not properly engaged)
+
+# Applications
+## Gromacs
+
+```{r rows.print=40}
+results_gromacs <- 
+  results_num %>%
+  filter(metric %in% c("Wall Clock Time","Simulation Speed","Energy","Power(Max)","Power(Mean Second Half)") & app =="gromacs") %>% 
+  left_join(app_version, by=c("resource", "task_id")) %>% 
+  select(-units,-metric_type,-app) %>%
+  spread(metric,value) %>%
+  mutate(PowerDer=Energy/`Wall Clock Time`,Power=`Power(Mean Second Half)`) %>% 
+  mutate(Power=ifelse(is.na(Power),`Power(Max)`,Power)) %>% 
+  mutate(Power=ifelse(is.na(Power),`PowerDer`,Power)) %>%
+  select(-`Energy`,-`Power(Max)`,-`Power(Mean Second Half)`,-PowerDer) %>%
+  filter(!(resource %in% c('Ookami-Fujitsu','Ookami-OSS') & is.na(Power))) %>%
+  # estimate for azure-altra-64 is 300 (from ampere presentation)-(210-180) (tdp difference)
+  mutate(Power=ifelse(resource==c('azure-altra-64'),300-(210-180),Power)) %>%
+  mutate(ns_per_kwh=`Simulation Speed`/(Power*24/1000)) %>% # Simulation Speed (ns/day) / (Power*24*/1000 kWh)
+  left_join(resource_spec[,c("resource","cores_per_node")], by=c("resource")) %>%
+  mutate(cores=nodes*cores_per_node) %>%
+  group_by(resource,app_version,cores) %>%
+  summarise(
+    `Simulation Speed (Mean)`=round(mean(`Simulation Speed`),1), 
+    `Simulation Speed (St.Dev.)`=round(sd(`Simulation Speed`),1),
+    `Simulation Speed per core (Mean)`=round(mean(`Simulation Speed`/cores),2),
+    Power=sci_notation_calc(Power,digits=0),
+    `ns_per_kwh (Mean)`=round(mean(`ns_per_kwh`),2), 
+    `ns_per_kwh (St.Dev.)`=round(sd(`ns_per_kwh`),2),
+    n=n(), .groups="drop") %>%
+  left_join(resource_spec, by=c("resource")) %>%
+  mutate(resource=factor(resource,level=names(ppn))) %>%
+  arrange(resource) %>% 
+  select("formal_name", "cpu", "cores", 
+"Simulation Speed (Mean)", "Simulation Speed (St.Dev.)", 
+"Simulation Speed per core (Mean)", "Power", "ns_per_kwh (Mean)", "ns_per_kwh (St.Dev.)", 
+"n", 
+"app_version", "resource",  "release_date", "nominal_freq")
+
+results_gromacs %>% write.csv("out/gromacs.csv")
+results_gromacs %>% kable()
+```
+Looks ok.
+
+Observations (Not UPDATED):
+
+ * x86 camp:
+   * The per core performance is the highest for intel ICX compiled with intel compilers.
+   * Zen3(Millan) per core performance is approaching Intel counterparts. But given that AMD system have more cores per node, the per node performance is x times faster.
+ * ARM camp:
+   * Graviton3 is the newest chip and it is shows the best performance. Per core-wise it is 20%%
+   * Graviton2 and Ampere Altra have very similar performance and per core performance is close to Zen2 generation of AMD. Also given that Ampere Altra Max system can have 128 physical core the per node performance can be already higher than lower core per node Intel systems.
+   * Unfortunatly Futjitsu A64FX does not take a full potential of SVE (512bit wide) instruction. 
+
+ * Same CPUs - different verndors - different sysadmins - same software installer
+   * Ampere Altra is faster on Azure (5%% over google). They might use different CPU models
+   * AMD EPYC 7742 Zen2 is 10%% faster on PSC Bridges-2 than SDSC Expanse. There are different versions, but Expanse sits between two versions of used on Bridges-2.
+     * install new version
+ * Newer versions performance change
+   * Update 2020.2 to 2022.3 got 5%% improvement, but it is not clear is it statistically significant or not becasue it is simila to standard deviation on that system.
+   * Not shown but there were improvement on Futjitsu A64FX over last couple years.
+
+## NWChem
+
+```{r rows.print=40}
+results_nwchem <- 
+  results_num %>%
+  filter(app =="nwchem") %>%
+  filter(metric %in% c("Wall Clock Time","Simulation Speed","Energy","Power(Max)","Power(Mean)")) %>% 
+  left_join(app_version, by=c("resource", "task_id")) %>% 
+  select(-units,-metric_type,-app) %>%
+  spread(metric,value) %>%
+  mutate(PowerDer=Energy/`Wall Clock Time`,Power=`Power(Mean)`) %>% 
+  mutate(Power=ifelse(is.na(Power),`Power(Max)`,Power)) %>% 
+  mutate(Power=ifelse(is.na(Power),`PowerDer`,Power)) %>%
+  select(-`Power(Max)`,-`Power(Mean)`,-PowerDer) %>%
+  #filter(!(resource %in% c('Ookami-Fujitsu','Ookami-OSS') & is.na(Power))) %>%
+  # estimate for azure-altra-64 is 300 (from ampere presentation)-(210-180) (tdp difference)
+  mutate(Power=ifelse(resource==c('azure-altra-64'),300-(210-180),Power)) %>%
+  # estimate for ookami is 110
+  mutate(Power=ifelse(resource %in% ookami_all,110,Power)) %>%
+  mutate(Energy=ifelse(is.na(Energy),Power*`Wall Clock Time`,Energy)) %>%
+  mutate(Energy2=Power*`Wall Clock Time`) %>%
+  mutate(kwh_per_jobs=Energy2/3600/1000) %>% # J = W*s=W/3600 Wh
+  mutate(jobs_per_kwh=1/kwh_per_jobs) %>% 
+  left_join(resource_spec[,c("resource","cores_per_node")], by=c("resource")) %>%
+  mutate(cores=nodes*cores_per_node) %>%
+  group_by(resource,app_version,cores) %>%
+  summarise(
+    `Wall Clock Time (Mean)`=sprintf("%.1f", mean(`Wall Clock Time`)), 
+    `Wall Clock Time (St.Dev.)`=sprintf("± %.1f", sd(`Wall Clock Time`)),
+    Power=sci_notation_calc(Power,digits=0),
+    `jobs_per_kwh (Mean)`=sprintf("%.0f", mean(`jobs_per_kwh`)), 
+    `jobs_per_kwh (St.Dev.)`=sprintf("± %.0f", sd(`jobs_per_kwh`)),
+    n=n(), .groups="drop") %>%
+  left_join(resource_spec, by=c("resource")) %>%
+  mutate(resource=factor(resource,level=names(ppn))) %>%
+  arrange(resource) %>% 
+  select("cpu", "cores", "Wall Clock Time (Mean)", "Wall Clock Time (St.Dev.)", "Power", "jobs_per_kwh (Mean)", "jobs_per_kwh (St.Dev.)", 
+"n", 
+"app_version", "formal_name", "resource",  "release_date", "nominal_freq")
+  
+results_nwchem %>% write.csv("out/nwchem.csv")
+results_nwchem %>% kable()
+```
+wall clock is too small, ookami didn't catch energy use, so estimated it with average from openfoam run
+
+
+## ENZO
+
+```{r rows.print=40}
+# Suspecious: high sd for Ookami-OSS
+df <- results_num %>%
+  filter(app =="enzo"&resource=="Ookami-OSS") %>%
+  filter(metric %in% c("Wall Clock Time","Simulation Speed","Energy","Power(Max)","Power(Mean)")) %>% 
+           select(-units,-metric_type,-app) %>%
+  spread(metric,value) %>% arrange(task_id)
+ggplot(df,aes(x=task_id,y=`Wall Clock Time`)) + geom_point()
+# outcome: it looks ok
+```
+
+```{r rows.print=40}
+# Suspecious: several app version and high mean for one of them on UBHPC_32core_SKX
+df <- results_num %>%
+  filter(app =="enzo"&resource=="UBHPC_32core") %>%
+  filter(metric %in% c("Wall Clock Time","Simulation Speed","Energy","Power(Max)","Power(Mean)")) %>% 
+           select(-units,-metric_type,-app) %>%
+  spread(metric,value) %>% arrange(task_id)
+ggplot(df,aes(x=task_id,y=`Wall Clock Time`)) + geom_point()
+# outcome: i think old one is the one I made manually and slow is with spack and opt=debug
+```
+
+
+```{r rows.print=40}
+results_enzo <- 
+  results_num %>%
+  filter(app =="enzo") %>%
+  filter(metric %in% c("Wall Clock Time","Simulation Speed","Energy","Power(Max)","Power(Mean)")) %>% 
+  left_join(app_version, by=c("resource", "task_id")) %>% 
+  select(-units,-metric_type,-app) %>%
+  spread(metric,value) %>%
+  mutate(PowerDer=Energy/`Wall Clock Time`,Power=`Power(Mean)`) %>% 
+  mutate(Power=ifelse(is.na(Power),`Power(Max)`,Power)) %>% 
+  mutate(Power=ifelse(is.na(Power),`PowerDer`,Power)) %>%
+  select(-`Power(Max)`,-`Power(Mean)`,-PowerDer) %>%
+  #filter(!(resource %in% c('Ookami-Fujitsu','Ookami-OSS') & is.na(Power))) %>%
+  # estimate for azure-altra-64 is 300 (from ampere presentation)-(210-180) (tdp difference)
+  mutate(Power=ifelse(resource==c('azure-altra-64'),300-(210-180),Power)) %>%
+  # estimate for ookami is 110
+  # mutate(Power=ifelse(resource %in% ookami_all,110,Power)) %>%
+  mutate(Energy=ifelse(is.na(Energy),Power*`Wall Clock Time`,Energy)) %>%
+  mutate(Energy2=Power*`Wall Clock Time`) %>%
+  mutate(kwh_per_jobs=Energy2/3600/1000) %>% # J = W*s=W/3600 Wh
+  mutate(jobs_per_kwh=1/kwh_per_jobs) %>% 
+  left_join(resource_spec[,c("resource","cores_per_node")], by=c("resource")) %>%
+  mutate(cores=nodes*cores_per_node) %>%
+  group_by(resource,app_version,cores) %>%
+  summarise(
+    `Wall Clock Time (Mean)`=sprintf("%.1f", mean(`Wall Clock Time`)/60), 
+    `Wall Clock Time (St.Dev.)`=sprintf("± %.1f", sd(`Wall Clock Time`)/60),
+    Power=sci_notation_calc(Power,digits=0),
+    `jobs_per_kwh (Mean)`=sprintf("%.1f", mean(`jobs_per_kwh`)), 
+    `jobs_per_kwh (St.Dev.)`=sprintf("± %.1f", sd(`jobs_per_kwh`)),
+    n=n(), .groups="drop") %>%
+  left_join(resource_spec, by=c("resource")) %>%
+  mutate(resource=factor(resource,level=names(ppn))) %>%
+  arrange(resource) %>% 
+  select("cpu", "cores", 
+"Wall Clock Time (Mean)", "Wall Clock Time (St.Dev.)", "Power", "jobs_per_kwh (Mean)", "jobs_per_kwh (St.Dev.)", 
+"n", 
+"app_version", "formal_name", "resource",  "release_date", "nominal_freq")
+  
+results_enzo %>% write.csv("out/enzo.csv")
+results_enzo %>% kable()
+```
+here we have inconsistent Wall Clock Time
+
+
+## OpenFOAM
+
+```{r}
+# Merge
+openfoam2 <- openfoam %>% 
+  rename(task_id=id,app_version=config) %>% 
+  mutate(
+    metric=recode(metric,
+                  mashing='Snappy run-time',
+                  solver='Solver run-time',
+                  runtime='Wall Clock Time'),
+    resource=recode(
+      resource,
+      `Amazon-Graviton3-48`="amazon-graviton3-48",
+      `Amazon-Graviton2-48`="amazon-graviton2-48", 
+      `Google-Ampere-Altra`="google-tau-t2a-48", 
+      `Stampede2-SKX`="stampede2-skx", 
+      `Stampede2-ICX`="stampede2-icx"),
+    units="Seconds",
+    app="openfoam",
+    nodes=1,
+    metric_type="statistic"
+    ) %>%
+  arrange(resource,app_version,cores,task_id,metric) %>%
+  select("resource", "app", "nodes", "cores", "task_id", "metric_type", 
+         "metric", "value", "units")  %>%
+  filter(!resource %in% ookami_all)
+
+
+```
+
+
+```{r rows.print=40}
+results_openfoam <- 
+  results_num %>%
+  filter(app =="openfoam") %>%
+  filter(metric %in% c("Wall Clock Time",'Snappy run-time','Solver run-time',"Energy","Power(Max)","Power(Mean)")) %>% 
+  bind_rows(openfoam2) %>% 
+  left_join(app_version, by=c("resource", "task_id")) %>% 
+  select(-units,-metric_type,-app) %>%
+  spread(metric,value) %>%
+  filter(!is.na(`Solver run-time`)) %>%
+  mutate(PowerDer=Energy/`Wall Clock Time`,Power=`Power(Mean)`) %>% 
+  mutate(Power=ifelse(is.na(Power),`Power(Max)`,Power)) %>% 
+  mutate(Power=ifelse(is.na(Power),`PowerDer`,Power)) %>%
+  select(-`Power(Max)`,-`Power(Mean)`,-PowerDer) %>%
+  #filter(!(resource %in% c('Ookami-Fujitsu','Ookami-OSS') & is.na(Power))) %>%
+  # estimate for azure-altra-64 is 300 (from ampere presentation)-(210-180) (tdp difference)
+  mutate(Power=ifelse(resource==c('azure-altra-64'),300-(210-180),Power)) %>%
+  # estimate for ookami is 110
+  # mutate(Power=ifelse(resource %in% ookami_all,110,Power)) %>%
+  mutate(Energy=ifelse(is.na(Energy),Power*`Wall Clock Time`,Energy)) %>%
+  mutate(Energy2=Power*`Wall Clock Time`) %>%
+  mutate(kwh_per_jobs=Energy2/3600/1000) %>% # J = W*s=W/3600 Wh
+  mutate(jobs_per_kwh=1/kwh_per_jobs) %>% 
+  left_join(resource_spec[,c("resource","cores_per_node")], by=c("resource")) %>%
+  mutate(cores=nodes*cores_per_node) %>%
+  group_by(resource,app_version,cores) %>%
+  summarise(
+    `Wall Clock Time (Mean)`=sprintf("%.1f", mean(`Wall Clock Time`)/60), 
+    `Wall Clock Time (St.Dev.)`=sprintf("± %.1f", sd(`Wall Clock Time`)/60),
+    `Meshing Time (Mean)`=sprintf("%.1f", mean(`Snappy run-time`)/60), 
+    `Meshing Time (St.Dev.)`=sprintf("± %.1f", sd(`Snappy run-time`)/60),
+    `Solver Time (Mean)`=sprintf("%.1f", mean(`Solver run-time`)/60), 
+    `Solver Time (St.Dev.)`=sprintf("± %.1f", sd(`Solver run-time`)/60),
+    Power=sci_notation_calc(Power,digits=0),
+    `jobs_per_kwh (Mean)`=sprintf("%.1f", mean(`jobs_per_kwh`)), 
+    `jobs_per_kwh (St.Dev.)`=sprintf("± %.1f", sd(`jobs_per_kwh`)),
+    n=n(), .groups="drop") %>%
+  left_join(resource_spec, by=c("resource")) %>%
+  mutate(resource=factor(resource,level=names(ppn))) %>%
+  arrange(resource) %>% 
+  select("formal_name", "cpu", "cores", 
+"Wall Clock Time (Mean)", "Wall Clock Time (St.Dev.)",
+`Meshing Time (Mean)`, `Meshing Time (St.Dev.)`,`Solver Time (Mean)`,`Solver Time (St.Dev.)`,"Power", "jobs_per_kwh (Mean)", "jobs_per_kwh (St.Dev.)", 
+"n", 
+"app_version", "resource",  "release_date", "nominal_freq")
+
+  
+results_openfoam %>% write.csv("out/openfoam.csv")
+results_openfoam %>% kable()
+```
+
+## ai_benchmark_alpha
+
+```{r rows.print=40}
+results_aibench <- 
+  results_num %>%
+  filter(app =="ai_benchmark_alpha") %>%
+  filter(metric %in% c("Wall Clock Time","AI Score","Inference Score","Training Score","Energy","Power(Max)","Power(Mean)")) %>% 
+  left_join(app_version, by=c("resource", "task_id")) %>% 
+  select(-units,-metric_type,-app) %>%
+  spread(metric,value) %>%
+  mutate(`Power(Mean)`=NA) %>% 
+  mutate(PowerDer=Energy/`Wall Clock Time`,Power=`Power(Mean)`) %>% 
+  mutate(Power=ifelse(is.na(Power),`Power(Max)`,Power)) %>% 
+  mutate(Power=ifelse(is.na(Power),`PowerDer`,Power)) %>%
+  select(-`Power(Max)`,-`Power(Mean)`,-PowerDer) %>%
+  filter(!(resource %in% ookami_all & is.na(Power))) %>%
+  # estimate for azure-altra-64 is 300 (from ampere presentation)-(210-180) (tdp difference)
+  mutate(Power=ifelse(resource==c('azure-altra-64'),300-(210-180),Power)) %>%
+  # estimate for ookami is 110
+  # mutate(Power=ifelse(resource %in% ookami_all,110,Power)) %>%
+  mutate(Energy=ifelse(is.na(Energy),Power*`Wall Clock Time`,Energy)) %>%
+  mutate(Energy2=Power*`Wall Clock Time`) %>%
+  mutate(aiscore_per_w=`AI Score`/Power) %>% 
+  left_join(resource_spec[,c("resource","cores_per_node")], by=c("resource")) %>%
+  mutate(cores=nodes*cores_per_node) %>%
+  group_by(resource,app_version,cores) %>%
+  summarise(
+    `Wall Clock Time (Mean)`=round(mean(`Wall Clock Time`),1), 
+    `Wall Clock Time (St.Dev.)`=round(sd(`Wall Clock Time`),1),
+    `AI Score (Mean)`=round(mean(`AI Score`),0), 
+    `AI Score (St.Dev.)`=sprintf("± %.0f", sd(`AI Score`)), 
+    `Inference Score (Mean)`=round(mean(`Inference Score`),0), 
+    `Inference Score (St.Dev.)`=sprintf("± %.0f", sd(`Inference Score`)), 
+    `Training Score (Mean)`=round(mean(`Training Score`),0), 
+    `Training Score (St.Dev.)`=sprintf("± %.0f", sd(`Training Score`)), 
+    Power=sci_notation_calc(Power,digits=0),
+    `aiscore_per_w (Mean)`=sprintf("%.1f", mean(`aiscore_per_w`)), 
+    `aiscore_per_w (St.Dev.)`=sprintf("± %.1f", sd(`aiscore_per_w`)),
+    n=n(), .groups="drop") %>%
+  left_join(resource_spec, by=c("resource")) %>%
+  mutate(resource=factor(resource,level=names(ppn))) %>%
+  arrange(resource) %>% 
+  select("cpu", "cores", 
+
+"AI Score (Mean)", "AI Score (St.Dev.)", 
+"Inference Score (Mean)", "Inference Score (St.Dev.)", "Training Score (Mean)", 
+"Training Score (St.Dev.)",
+"Power", "aiscore_per_w (Mean)", "aiscore_per_w (St.Dev.)", 
+"n", "formal_name", 
+"Wall Clock Time (Mean)", "Wall Clock Time (St.Dev.)",
+"app_version", "resource",  "release_date", "nominal_freq")
+  
+#mutate(speed=sci_notation(average,stdev,n,0),per_core=round(average/cores,2)) %>%
+  
+results_aibench %>% write.csv("out/aibench.csv")
+results_aibench %>% kable()
+```
+
+# Benchmarks
+## HPCC
+
+```{r rows.print=40}
+results_hpcc <- 
+  results_num %>%
+  filter(app =="hpcc") %>%
+  mutate(metric=recode(
+    metric,
+    `Average Double-Precision General Matrix Multiplication (DGEMM) Floating-Point Performance`="Mat. Mult.",
+    `High Performance LINPACK Floating-Point Performance`="LINPACK",
+    `Fast Fourier Transform (FFTW) Floating-Point Performance`="FFT"
+    )) %>%
+  filter(metric %in% c("Wall Clock Time","Mat. Mult.","LINPACK","FFT","Energy","Power(Max)","Power(Mean)")) %>% 
+  left_join(app_version, by=c("resource", "task_id")) %>% 
+  select(-units,-metric_type,-app) %>%
+  spread(metric,value) %>%
+  mutate(`Power(Mean)`=NA) %>% 
+  mutate(PowerDer=Energy/`Wall Clock Time`,Power=`Power(Mean)`) %>% 
+  mutate(Power=ifelse(is.na(Power),`Power(Max)`,Power)) %>% 
+  mutate(Power=ifelse(is.na(Power),`PowerDer`,Power)) %>%
+  select(-`Power(Max)`,-`Power(Mean)`,-PowerDer) %>%
+  #filter(!(resource %in% ookami_all & is.na(Power))) %>%
+  # estimate for azure-altra-64 is 300 (from ampere presentation)-(210-180) (tdp difference)
+  mutate(Power=ifelse(resource==c('azure-altra-64'),300-(210-180),Power)) %>%
+  # estimate for ookami is 110
+  mutate(Power=ifelse(resource %in% ookami_all,110,Power)) %>%
+  mutate(Energy=ifelse(is.na(Energy),Power*`Wall Clock Time`,Energy)) %>%
+  mutate(Energy2=Power*`Wall Clock Time`) %>%
+  mutate(kwh_per_jobs=Energy2/3600/1000) %>% # J = W*s=W/3600 Wh
+  mutate(jobs_per_kwh=1/kwh_per_jobs) %>% 
+  left_join(resource_spec[,c("resource","cores_per_node")], by=c("resource")) %>%
+  mutate(cores=nodes*cores_per_node) %>%
+  group_by(resource,app_version,cores) %>%
+  summarise(
+    `Wall Clock Time (Mean)`=round(mean(`Wall Clock Time`),1), 
+    `Wall Clock Time (St.Dev.)`=paste0("± ", round(sd(`Wall Clock Time`),1)),
+    `Mat. Mult. (Mean)`=sprintf("%.1f", mean(`Mat. Mult.`)/1000), 
+    `Mat. Mult. (St.Dev.)`=sprintf("± %.1f", sd(`Mat. Mult.`)/1000),
+    `LINPACK (Mean)`=round(mean(`LINPACK`)/1000,0), 
+    `LINPACK (St.Dev.)`=paste0("± ", round(sd(`LINPACK`)/1000,0)),
+    `FFT (Mean)`=sprintf("%.1f", mean(`FFT`/1000)), 
+    `FFT (St.Dev.)`=sprintf("± %.1f", sd(`FFT`/1000)),
+    Power=sci_notation_calc(Power,digits=0),
+    `jobs_per_kwh (Mean)`=round(mean(`jobs_per_kwh`),0), 
+    `jobs_per_kwh (St.Dev.)`=paste0("± ", round(sd(`jobs_per_kwh`),0)),
+    n=n(), .groups="drop") %>%
+  left_join(resource_spec, by=c("resource")) %>%
+  mutate(resource=factor(resource,level=names(ppn))) %>%
+  arrange(resource) %>%  
+  select("cpu", "cores", 
+ "Mat. Mult. (Mean)", "Mat. Mult. (St.Dev.)", 
+"LINPACK (Mean)", "LINPACK (St.Dev.)", "FFT (Mean)", "FFT (St.Dev.)",
+"Power", "jobs_per_kwh (Mean)", "jobs_per_kwh (St.Dev.)", "n", 
+"Wall Clock Time (Mean)", 
+"Wall Clock Time (St.Dev.)", 
+"app_version", "formal_name",  "resource",  "release_date", "nominal_freq"
+)
+results_hpcc %>%  write.csv("out/hpcc.csv")
+results_hpcc %>% kable()
+```
+
+# Energy Plot.
+
+```{r}
+eo <- readr::read_csv("data/ookami_power_openfoam.csv", show_col_types = FALSE)
+eo$t <- eo$t - eo$t[1]
+eo$Resource <- "Ookami, Fujitsu A64FX"
+
+eu <- readr::read_csv("data/ubhpc_power_openfoam.csv", show_col_types = FALSE)
+eu$t <- as.numeric(eu$t - eu$t[1])
+eu$Resource <- "UB-HPC, Intel Xeon Gold 6330"
+
+df <- bind_rows(eu,eo) %>% rename("t, seconds"=t)
+df  %>% kable()
+```
+
+```{r}
+ggplot(df,aes(x=`t, seconds`,y=`Power, W`, color=Resource)) + geom_point()+geom_line()+
+   theme(legend.position = "bottom")
+ggsave("figs/power.pdf")
+```
+
