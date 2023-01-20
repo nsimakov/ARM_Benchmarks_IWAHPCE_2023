@@ -19,3 +19,18 @@ The data set is in `data` folder:
 
 Analysis script `01_Analyze.Rmd` aggregate data and write to `out/<app_name>.csv`.
 The later files combined in `spreadsheet.xlsx` for final table visualization with sparklines.
+
+
+`results_num` and `results_str` consists of same columns 
+the difference is that `results_num` contains numeric metrics like `Wall Clock Time` and 
+`results_str` contains string metrics like `App:Version`. Below is the description of a columns:
+
+* resource - resource name
+* app - name of application kernel
+* nodes - number of cores used
+* cores - number of cores used
+* task_id - internal job id, rows with same `task_id` are from same batch job.
+* metric_type - type of metric: either parameter or statistics, sometime there is a fine line between them.
+* metric - metric name
+* value - metric value
+* units - metric units
